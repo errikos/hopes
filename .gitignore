@@ -41,3 +41,8 @@ _darcs/
 
 dist
 setup
+
+# cabal sandbox
+cabal.sandbox.config
+.cabal-sandbox
+
