@@ -74,8 +74,11 @@ In order to build HOPES you must have installed the GHC compiler
 version 6 or higher and the cabal system. You can download GHC from
 http://www.haskell.org/ghc/. The following sequence of cabal commands
 will install any depedencies and build the project.
+
+It is recommended that you use a cabal sandbox for the build.
 ```bash
 $ cabal update
+$ cabal sandbox init
 $ cabal install --only-dependencies
 $ cabal configure && cabal build
 ```
