@@ -165,11 +165,11 @@ negreduce (Not e) =
                       vs2' <- mapM (freshVarOfType.typeOf) vs2
                       let vs' = vs1' ++ vs2'
                       let (Var r) = functor e
-                      let renaming = (renameSubst vs1 vs1') `combine` (renameSubst vs2 vs2') `combine` [(r, (Select (functor e)))]
-                      let e' = subst (renaming) e
+                      let renaming = (renameSubst vs1 vs1') `combine` (renameSubst vs2 vs2')
+                      let e' = subst (renaming `combine` [(r, (Select (functor e)))]) e
                       let es' = map (subst renaming) es
                       let eq = map (\(v,e) -> Eq (Var v) e) renaming
-                      let es'' = foldAnd eq `Or` foldAnd es'
+                      let es'' = foldAnd es' `Or` foldAnd eq
                       return $ notExists vs1 [e] `Or`
                                   (exists vs1 (e `And` (notExists vs2 es) `And` (notExists vs' ([e', es'']))))
 
@@ -201,7 +201,7 @@ reduce e =
         Lambda _ _ -> lambdaReduce e
         And _ _    -> expandApp e
         Or  _ _    -> expandApp e
-        Select f   -> return $ substFunc (select f) e
+        Select f   -> return $ substFunc e (select f)
         _ -> fail "cannot reduce"
 
 -- select :: Expr a -> Expr a
